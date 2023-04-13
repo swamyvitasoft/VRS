@@ -1,0 +1,11 @@
+CRITICAL - 2023-04-11 21:48:59 --> Invalid argument supplied for foreach()
+in APPPATH\Views\dashboard\add.php on line 62.
+ 1 APPPATH\Views\dashboard\add.php(62): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Invalid argument supplied for foreach()', 'C:\\xampp\\htdocs\\vrs\\backend\\app\\Views\\dashboard\\add.php', 62, [...])
+ 2 SYSTEMPATH\View\View.php(213): include('C:\\xampp\\htdocs\\vrs\\backend\\app\\Views\\dashboard\\add.php')
+ 3 SYSTEMPATH\View\View.php(216): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1184): CodeIgniter\View\View->render('dashboard/add', [], true)
+ 5 APPPATH\Controllers\Dashboard.php(32): view('dashboard/add')
+ 6 SYSTEMPATH\CodeIgniter.php(934): App\Controllers\Dashboard->add()
+ 7 SYSTEMPATH\CodeIgniter.php(499): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Dashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(368): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
