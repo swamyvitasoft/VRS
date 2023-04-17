@@ -8,23 +8,17 @@ use App\Libraries\Hash;
         <div class="lds-pos"></div>
     </div>
 </div>
-<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-    <?= view('common/header') ?>
-    <?= view('common/aside') ?>
-    <div class="page-wrapper">
-        <div class="page-breadcrumb">
-            <div class="row">
-                <div class="col-8 d-flex no-block align-items-center">
-                    <h4 class="page-title"><?= $pageHeading ?></h4>
-                </div>
-                <div class="col-4 d-flex no-block align-items-center">
-                    <a href="<?= site_url() ?>dashboard/<?= Hash::path('view') ?>">List</a>
-                </div>
-            </div>
+<div id="main">
+    <div class="row pt-3">
+        <div class="col-12 text-center">
+            <h3>Welcome TO Karimnagar VRS Authenticator</h3>
+            <h5>Karimnagar,Hanmkonda</h5>
         </div>
+    </div>
+    <div class="page-wrapper">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+            <div class="row justify-content-md-center">
+                <div class="col col-8">
                     <div class="card">
                         <div class="card-head">
                             <?= csrf_field(); ?>
@@ -37,6 +31,11 @@ use App\Libraries\Hash;
                         <div class="card-body">
                             <form action="<?= site_url() ?>dashboard/<?= Hash::path('addAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
                                 <div class="col-10">
+                                    <div class="form-group mt-3">
+                                        <label for="empId" class="form-label">Employee Id</label>
+                                        <input type="text" name="empId" class="form-control" id="empId" placeholder="" value="<?= set_value('empId') ?>">
+                                        <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'empId') : '' ?></small>
+                                    </div>
                                     <div class="form-group mt-3">
                                         <label for="fullname" class="form-label">Name of the ex-employee retired under MVRS, 2022 of AJ Mill</label>
                                         <input type="text" name="fullname" class="form-control" id="fullname" placeholder="" value="<?= set_value('fullname') ?>">
@@ -176,6 +175,7 @@ use App\Libraries\Hash;
                                             <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'esipf') : '' ?></small>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="auth_id" id="auth_id" value="<?= session()->getFlashdata('auth_id') ?>">
                                     <div class="text-center"><button type="submit" class="btn btn-success">Save</button></div>
                                 </div>
                             </form>
