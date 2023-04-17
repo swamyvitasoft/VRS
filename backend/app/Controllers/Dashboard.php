@@ -3,16 +3,52 @@
 namespace App\Controllers;
 
 use App\Libraries\Hash;
+use App\Models\AuthModel;
 use App\Models\RegisterModel;
 
 class Dashboard extends BaseController
 {
     private $loggedInfo;
     private $registerModel;
+    private $authModel;
     public function __construct()
     {
         $this->registerModel = new RegisterModel();
+        $this->authModel = new AuthModel();
         $this->loggedInfo = session()->get('LoggedData');
+    }
+    public function authAction()
+    {
+        $pidData = $this->request->getPost("pdata");
+        $json1 = '' . $pidData;
+        $data = json_decode($json1, TRUE);
+        $nmPoints = $data['PidData']['Resp']['_nmPoints'];
+        $qScore = $data['PidData']['Resp']['_qScore'];
+        $skey_ci = $data['PidData']['Skey']['_ci'];
+        $skey = $data['PidData']['Skey']['__text'];
+        $hmac = $data['PidData']['Hmac'];
+        $data_type = $data['PidData']['Data']['_type'];
+        $dataa = $data['PidData']['Data']['__text'];
+
+        $inputData = [
+            'pidData' => $pidData,
+            'nmPoints' => $nmPoints,
+            'qScore' => $qScore,
+            'skey' => $skey,
+            'skey_ci' => $skey_ci,
+            'hmac' => $hmac,
+            'dataa' => $dataa,
+            'data_type' => $data_type,
+            'status' => 1,
+            'login_id' => $this->loggedInfo['login_id'],
+        ];
+        $query = $this->authModel->insert($inputData);
+        $auth_id = $this->authModel->getInsertID();
+        if (!$query) {
+            return  redirect()->back()->with('fail', 'Something went wrong Input Data.')->withInput();
+        } else {
+            return  redirect()->to('dashboard/' . Hash::path('add'))->with('auth_id', $auth_id);
+        }
     }
     public function index()
     {
@@ -93,6 +129,13 @@ class Dashboard extends BaseController
     public function addAction()
     {
         $validation = $this->validate([
+            'empId' => [
+                'rules'  => 'required | is_unique[register.empId]',
+                'errors' => [
+                    'required' => 'Employee Id is required.',
+                    'is_unique' => 'Employee ID Already registered'
+                ]
+            ],
             'fullname' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -163,12 +206,12 @@ class Dashboard extends BaseController
         if (!$validation) {
             return  redirect()->back()->with('validation', $this->validator)->withInput();
         } else {
-            $phone_folder = $this->request->getPost("phone");
-            if (!is_dir('uploads/' . $phone_folder)) {
-                mkdir('./uploads/' . $phone_folder, 0777, TRUE);
-                $path = 'uploads/' . $phone_folder;
+            $empId = $this->request->getPost("empId");
+            if (!is_dir('uploads/' . $empId)) {
+                mkdir('./uploads/' . $empId, 0777, TRUE);
+                $path = 'uploads/' . $empId;
             } else {
-                $path = 'uploads/' . $phone_folder;
+                $path = 'uploads/' . $empId;
             }
             $aadhar_path = '';
             if ($this->request->getPost("aadhar_radio") == "Yes") {
@@ -266,7 +309,22 @@ class Dashboard extends BaseController
                     $esipf_path = $this->request->getPost("esipf");
                 }
             }
+            $photo_path = '';
+            $photo = $this->request->getFile('photo');
+            if ($photo->isValid()) {
+                if (!$photo->hasMoved()) {
+                    $photo_path = $photo->getRandomName();
+                    $photo->move($path, $photo_path);
+                    $photo_path = $path . "/" . $photo_path;
+                }
+            } else {
+                if (empty($this->request->getPost("esipf"))) {
+                    return  redirect()->back()->with('fail', 'Upload your Latest Photo')->withInput();
+                }
+                $photo_path = $this->request->getPost("photo");
+            }
             $inputData = [
+                'empId' => $empId,
                 'fullname' => $this->request->getPost("fullname"),
                 'fname' => $this->request->getPost("fname"),
                 'address' => $this->request->getPost("address"),
@@ -284,7 +342,8 @@ class Dashboard extends BaseController
                 'pensionorder' => $pensionorder_path,
                 'esipf_radio' => $this->request->getPost("esipf_radio"),
                 'esipf' => $esipf_path,
-                'thumb' => 'thumb',
+                'photo' => $photo_path,
+                'auth_id' => $this->request->getPost("auth_id"),
                 'status' => 1,
                 'login_id' => $this->loggedInfo['login_id'],
                 'created' => date("Y-m-d H:i:s")
