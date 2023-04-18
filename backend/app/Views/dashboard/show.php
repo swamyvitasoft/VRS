@@ -4,17 +4,12 @@
         <div class="lds-pos"></div>
     </div>
 </div>
-<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-    <?= view('common/header') ?>
-    <?= view('common/aside') ?>
+<div id="main">
+    <?= view('common/header1') ?>
     <div class="page-wrapper">
-        <div class="page-breadcrumb">
-            <div class="row">
-            </div>
-        </div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+            <div class="row justify-content-md-center">
+                <div class="col col-8">
                     <div class="card">
                         <div class="card-head">
                         </div>
@@ -32,6 +27,10 @@
                         ?>
                             <div class="card-body">
                                 <div class="col-10">
+                                    <div class="form-group mt-3">
+                                        <label for="empId" class="form-label">Employee Id</label>
+                                        <label class="ms-3 h5"><?= $registeredData['empId'] ?></label>
+                                    </div>
                                     <div class="form-group mt-3">
                                         <label for="fullname" class="form-label">Name of the ex-employee retired under MVRS, 2022 of AJ Mill:</label>
                                         <label class="ms-3 h5"><?= $registeredData['fullname'] ?></label>
@@ -58,7 +57,7 @@
                                         <?php
                                         if ($registeredData['aadhar_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['aadhar'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['aadhar'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['aadhar'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
@@ -69,7 +68,7 @@
                                         <?php
                                         if ($registeredData['relieving_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['relieving'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['relieving'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['relieving'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
@@ -80,7 +79,7 @@
                                         <?php
                                         if ($registeredData['payslip_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['payslip'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['payslip'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['payslip'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
@@ -91,7 +90,7 @@
                                         <?php
                                         if ($registeredData['identitycard_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['identitycard'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['identitycard'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['identitycard'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
@@ -102,7 +101,7 @@
                                         <?php
                                         if ($registeredData['pensionorder_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['pensionorder'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['pensionorder'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['pensionorder'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
@@ -113,10 +112,14 @@
                                         <?php
                                         if ($registeredData['esipf_radio'] == "Yes") {
                                         ?>
-                                            <img src="<?= site_url() ?><?= $registeredData['esipf'] ?>" class="img-fluid w-25">
+                                            <a href="<?= site_url() ?><?= $registeredData['esipf'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['esipf'] ?>" class="img-fluid w-25"></a>
                                         <?php
                                         }
                                         ?>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="photo" class="form-label">Photo</label>
+                                        <a href="<?= site_url() ?><?= $registeredData['photo'] ?>" target="_new"><img src="<?= site_url() ?><?= $registeredData['photo'] ?>" class="img-fluid w-25"></a>
                                     </div>
                                 </div>
                             </div>
