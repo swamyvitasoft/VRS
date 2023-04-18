@@ -43,6 +43,7 @@ $routes->group('/', ['filter' => 'AlreadyLoggedIn'], function ($routes) {
 $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->group('dashboard/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Dashboard::index');
+        $routes->post(Hash::path('authAction'), 'Dashboard::authAction');
         $routes->get(Hash::path('add'), 'Dashboard::add');
         $routes->post(Hash::path('addAction'), 'Dashboard::addAction');
         $routes->get(Hash::path('view'), 'Dashboard::view');

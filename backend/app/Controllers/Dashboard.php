@@ -130,10 +130,9 @@ class Dashboard extends BaseController
     {
         $validation = $this->validate([
             'empId' => [
-                'rules'  => 'required | is_unique[register.empId]',
+                'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Employee Id is required.',
-                    'is_unique' => 'Employee ID Already registered'
+                    'required' => 'Employee Id is required.'
                 ]
             ],
             'fullname' => [
@@ -200,6 +199,12 @@ class Dashboard extends BaseController
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'ESI PF is required Yes/No.'
+                ],
+            ],
+            'photo_radio' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Photo is required.'
                 ],
             ]
         ]);
@@ -310,18 +315,28 @@ class Dashboard extends BaseController
                 }
             }
             $photo_path = '';
-            $photo = $this->request->getFile('photo');
-            if ($photo->isValid()) {
-                if (!$photo->hasMoved()) {
-                    $photo_path = $photo->getRandomName();
-                    $photo->move($path, $photo_path);
-                    $photo_path = $path . "/" . $photo_path;
+            if ($this->request->getPost("photo_radio") == "Choose") {
+                $photo1 = $this->request->getFile('photo1');
+                if ($photo1->isValid()) {
+                    if (!$photo1->hasMoved()) {
+                        $photo_path = $photo1->getRandomName();
+                        $photo1->move($path, $photo_path);
+                        $photo_path = $path . "/" . $photo_path;
+                    }
+                } else {
+                    if (empty($this->request->getPost("photo1"))) {
+                        return  redirect()->back()->with('fail', 'Photo Choose First')->withInput();
+                    }
+                    $photo1 = $this->request->getPost("photo1");
                 }
-            } else {
-                if (empty($this->request->getPost("esipf"))) {
-                    return  redirect()->back()->with('fail', 'Upload your Latest Photo')->withInput();
-                }
-                $photo_path = $this->request->getPost("photo");
+            } else if ($this->request->getPost("photo_radio") == "Camere") {
+                $photo2 = $this->request->getPost('photo2');
+                $photo2 = '' . $photo2;
+                list($type, $photo2) = explode(';', $photo2);
+                list(, $photo2)      = explode(',', $photo2);
+                $photo_base64 = base64_decode($photo2);
+                $photo_path         = $path . '/' . uniqid() . '.png';
+                file_put_contents($photo_path, $photo_base64);
             }
             $inputData = [
                 'empId' => $empId,
