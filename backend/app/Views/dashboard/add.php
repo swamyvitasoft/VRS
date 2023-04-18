@@ -9,18 +9,14 @@ use App\Libraries\Hash;
     </div>
 </div>
 <div id="main">
-    <div class="row pt-3">
-        <div class="col-12 text-center">
-            <h3>Welcome TO Karimnagar VRS Authenticator</h3>
-            <h5>Karimnagar,Hanmkonda</h5>
-        </div>
-    </div>
+    <?= view('common/header1') ?>
     <div class="page-wrapper">
         <div class="container-fluid">
             <div class="row justify-content-md-center">
                 <div class="col col-8">
                     <div class="card">
-                        <div class="card-head">
+                        <div class="card-header">
+                            <p class="text-center text-danger">Note: Untill Save Information Don't Refresh Browser</p>
                             <?= csrf_field(); ?>
                             <?php if (!empty(session()->getFlashdata('fail'))) : ?>
                                 <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
@@ -71,7 +67,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['aadhar'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="aadhar" name="aadhar" />
@@ -90,7 +86,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['relieving'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="relieving" name="relieving" />
@@ -109,7 +105,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['payslip'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="payslip" name="payslip" />
@@ -128,7 +124,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['identitycard'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="identitycard" name="identitycard" />
@@ -147,7 +143,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['pensionorder'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="pensionorder" name="pensionorder" />
@@ -166,7 +162,7 @@ use App\Libraries\Hash;
                                                     <img src="<?= site_url() ?><?= $registeredData['esipf'] ?>" alt="" class="img-fluid w-50" />
                                                 </div>
                                                 <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <span class="btn btn-theme02 btn-file">
+                                                <span class="btn btn-warning btn-file">
                                                     <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
                                                     <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
                                                     <input type="file" class="default" id="esipf" name="esipf" />
@@ -175,7 +171,32 @@ use App\Libraries\Hash;
                                             <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'esipf') : '' ?></small>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="auth_id" id="auth_id" value="<?= session()->getFlashdata('auth_id') ?>">
+                                    <div class="form-group mt-3">
+                                        <label for="photo" class="form-label">Photo</label>
+                                        <input type="radio" class="form-check-input" name="photo_radio" id="photo_choose" value="Choose" checked>Chosse To Upload
+                                        <input type="radio" class="form-check-input" name="photo_radio" id="photo_camera" value="Camere">Capture from Camera
+                                        <div id="choose">
+                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;">
+                                                    <img src="<?= site_url() ?><?= $registeredData['photo'] ?>" alt="" class="img-fluid" />
+                                                </div>
+                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 250px; max-height: 250px; line-height: 20px;"></div>
+                                                <span class="btn btn-warning btn-file">
+                                                    <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                                    <input type="file" class="default" id="photo1" name="photo1" />
+                                                </span>
+                                            </div>
+                                            <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'photo') : '' ?></small>
+                                        </div>
+                                        <div id="camera" style="display: none;">
+                                            <video id="player" autoplay style="max-width: 200px; max-height: 200px;"></video>
+                                            <canvas id="snapshot" style="max-width: 250px; max-height: 250px;"></canvas>
+                                            <button id="capture" type="button" class="btn btn-primary mb-5">Take a Capture</button>
+                                            <input type="hidden" name="photo2" id="photo2" class="form-control">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="auth_id" id="auth_id" class="form-control" readonly value="<?= session()->getFlashdata('auth_id') ?>">
                                     <div class="text-center"><button type="submit" class="btn btn-success">Save</button></div>
                                 </div>
                             </form>
@@ -190,6 +211,39 @@ use App\Libraries\Hash;
 <script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
+        $("#photo_choose").click(function() {
+            if ($(this).is(":checked")) {
+                $("#choose").show();
+                $("#camera").hide();
+            }
+        });
+        $("#photo_camera").click(function() {
+            if ($(this).is(":checked")) {
+                $("#choose").hide();
+                $("#camera").show();
+                var player = document.getElementById('player');
+                var snapshotCanvas = document.getElementById('snapshot');
+                var captureButton = document.getElementById('capture');
+                var handleSuccess = function(stream) {
+                    // Attach the video stream to the video element and autoplay.
+                    player.srcObject = stream;
+                };
+                captureButton.addEventListener('click', function() {
+                    var context = snapshot.getContext('2d');
+                    // Draw the video frame to the canvas.
+                    context.drawImage(player, 0, 0, snapshotCanvas.width,
+                        snapshotCanvas.height);
+                    var photo = context.canvas.toDataURL('image/jpeg');
+                    $("#photo2").val(photo);
+                    console.log(photo);
+                });
+                navigator.mediaDevices.getUserMedia({
+                        video: true
+                    })
+                    .then(handleSuccess);
+            }
+        });
+
         $("#aadhar_yes").click(function() {
             if ($(this).is(":checked")) {
                 $("#aadhar").show();
