@@ -9,12 +9,7 @@ use App\Libraries\Hash;
     </div>
 </div>
 <div id="main">
-    <div class="row pt-3">
-        <div class="col-12 text-center">
-            <h3>Welcome TO Karimnagar VRS Authenticator</h3>
-            <h5>Karimnagar,Hanmkonda</h5>
-        </div>
-    </div>
+    <?= view('common/header1') ?>
     <div class="page-wrapper pt-5">
         <div class="container-fluid">
             <div class="row">
@@ -30,16 +25,23 @@ use App\Libraries\Hash;
                         </div>
                         <div class="card-body mx-auto d-block">
                             <button type="button" id="register" class="btn btn-cyan btn-lg rounded text-white register" value='{"register" :"register"}'> Registration </button>
-                            <label id="success"></label>
                             <form action="<?= site_url() ?>dashboard/<?= Hash::path('authAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
                                 <textarea id="pdata" name="pdata" cols="250" rows="30" style="display: none;"></textarea>
-                                <input type="submit" value="submit" class="btn btn-success btn-lg rounded text-white success1">
+                                <button type="submit" class="btn btn-success btn-lg rounded text-white success1">Next</button>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="card">
+                        <div class="card-header">
+                            <?= csrf_field(); ?>
+                            <?php if (!empty(session()->getFlashdata('fail'))) : ?>
+                                <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
+                            <?php elseif (!empty(session()->getFlashdata('success'))) : ?>
+                                <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+                            <?php endif ?>
+                        </div>
                         <div class="card-body mx-auto d-block">
                             <button type="button" id="login" class="btn btn-primary btn-lg rounded text-white login" value='{"login" :"login"}'> Authentication </button>
                         </div>
