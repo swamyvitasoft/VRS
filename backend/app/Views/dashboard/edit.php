@@ -8,23 +8,12 @@ use App\Libraries\Hash;
         <div class="lds-pos"></div>
     </div>
 </div>
-<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-    <?= view('common/header') ?>
-    <?= view('common/aside') ?>
+<div id="main">
+    <?= view('common/header1') ?>
     <div class="page-wrapper">
-        <div class="page-breadcrumb">
-            <div class="row">
-                <div class="col-8 d-flex no-block align-items-center">
-                    <h4 class="page-title"><?= $pageHeading ?></h4>
-                </div>
-                <div class="col-4 d-flex no-block align-items-center">
-                    <a href="<?= site_url() ?>dashboard/<?= Hash::path('view') ?>">List</a>
-                </div>
-            </div>
-        </div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+            <div class="row justify-content-md-center">
+                <div class="col col-8">
                     <div class="card">
                         <div class="card-head">
                             <?= csrf_field(); ?>
@@ -36,7 +25,12 @@ use App\Libraries\Hash;
                         </div>
                         <div class="card-body">
                             <form action="<?= site_url() ?>dashboard/<?= Hash::path('addAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
-                                <div class="col-8">
+                                <div class="col-10">
+                                    <div class="form-group mt-3">
+                                        <label for="empId" class="form-label">Employee Id</label>
+                                        <input type="text" name="empId" class="form-control" id="empId" placeholder="" value="<?= $registeredData['empId'] ?>" readonly>
+                                        <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'empId') : '' ?></small>
+                                    </div>
                                     <div class="form-group mt-3">
                                         <label for="fullname" class="form-label">Name of the ex-employee retired under MVRS, 2022 of AJ Mill</label>
                                         <input type="text" name="fullname" class="form-control" id="fullname" placeholder="" value="<?= $registeredData['fullname'] ?>">
@@ -59,7 +53,7 @@ use App\Libraries\Hash;
                                     </div>
                                     <div class="form-group mt-3">
                                         <label for="phone" class="form-label">Phone / Mobile number</label>
-                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="" value="<?= $registeredData['phone'] ?>" readonly>
+                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="" value="<?= $registeredData['phone'] ?>">
                                         <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'phone') : '' ?></small>
                                     </div>
                                     <div class="form-group mt-3">
@@ -182,6 +176,31 @@ use App\Libraries\Hash;
                                             <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'esipf') : '' ?></small>
                                         </div>
                                     </div>
+                                    <div class="form-group mt-3">
+                                        <label for="photo" class="form-label">Photo</label>
+                                        <input type="radio" class="form-check-input" name="photo_radio" id="photo_choose" value="Choose" checked>Chosse To Upload
+                                        <input type="radio" class="form-check-input" name="photo_radio" id="photo_camera" value="Camere">Capture from Camera
+                                        <div id="choose">
+                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                <div class="fileupload-new thumbnail" style="width: 200px; height: 200px;">
+                                                    <img src="<?= site_url() ?><?= $registeredData['photo'] ?>" alt="" class="img-fluid" />
+                                                </div>
+                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 250px; max-height: 250px; line-height: 20px;"></div>
+                                                <span class="btn btn-theme02 btn-file">
+                                                    <span class="fileupload-new"><i class="fa fa-paperclip"></i> Select image</span>
+                                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                                    <input type="file" class="default" id="photo1" name="photo1" />
+                                                </span>
+                                            </div>
+                                            <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'photo') : '' ?></small>
+                                        </div>
+                                        <div id="camera" style="display: none;">
+                                            <video id="player" autoplay style="max-width: 200px; max-height: 200px;"></video>
+                                            <canvas id="snapshot" style="max-width: 250px; max-height: 250px;"></canvas>
+                                            <button id="capture" type="button" class="btn btn-primary mb-5">Take a Capture</button>
+                                            <input type="hidden" name="photo2" id="photo2" class="form-control">
+                                        </div>
+                                    </div>
                                     <input type="hidden" name="register_id" id="register_id" value="<?= $registeredData['register_id'] ?>">
                                     <div class="text-center"><button type="submit" class="btn btn-success">Save</button></div>
                                 </div>
@@ -197,6 +216,39 @@ use App\Libraries\Hash;
 <script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
+        $("#photo_choose").click(function() {
+            if ($(this).is(":checked")) {
+                $("#choose").show();
+                $("#camera").hide();
+            }
+        });
+        $("#photo_camera").click(function() {
+            if ($(this).is(":checked")) {
+                $("#choose").hide();
+                $("#camera").show();
+                var player = document.getElementById('player');
+                var snapshotCanvas = document.getElementById('snapshot');
+                var captureButton = document.getElementById('capture');
+                var handleSuccess = function(stream) {
+                    // Attach the video stream to the video element and autoplay.
+                    player.srcObject = stream;
+                };
+                captureButton.addEventListener('click', function() {
+                    var context = snapshot.getContext('2d');
+                    // Draw the video frame to the canvas.
+                    context.drawImage(player, 0, 0, snapshotCanvas.width,
+                        snapshotCanvas.height);
+                    var photo = context.canvas.toDataURL('image/jpeg');
+                    $("#photo2").val(photo);
+                    console.log(photo);
+                });
+                navigator.mediaDevices.getUserMedia({
+                        video: true
+                    })
+                    .then(handleSuccess);
+            }
+        });
+
         $("#aadhar_yes").click(function() {
             if ($(this).is(":checked")) {
                 $("#aadhar").show();
