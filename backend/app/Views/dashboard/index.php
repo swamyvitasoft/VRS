@@ -44,6 +44,10 @@ use App\Libraries\Hash;
                         </div>
                         <div class="card-body mx-auto d-block">
                             <button type="button" id="login" class="btn btn-primary btn-lg rounded text-white login" value='{"login" :"login"}'> Authentication </button>
+                            <form action="<?= site_url() ?>dashboard/<?= Hash::path('authenAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
+                                <textarea id="pdataa" name="pdata" cols="250" rows="30" style="display: none;"></textarea>
+                                <button type="submit" class="btn btn-success btn-lg rounded text-white success2">Show My Data</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -57,6 +61,7 @@ use App\Libraries\Hash;
 <script>
     $(document).ready(function() {
         $(".success1").hide();
+        $(".success2").hide();
         $(document).on("click", ".register", function(e) {
             var port;
             var urlStr = '';
@@ -70,6 +75,23 @@ use App\Libraries\Hash;
                         $(".register").hide();
                         $(".success1").show();
                         $("#pdata").val(JSON.stringify(x2js.xml_str2json(data)));
+                    }
+                }
+            );
+        });
+        $(document).on("click", ".login", function(e) {
+            var port;
+            var urlStr = '';
+            urlStr = 'http://localhost:11100/rd/capture';
+            getJSONCapture(urlStr,
+                function(err, data) {
+                    if (err != null) {
+                        alert('Something went wrong: ' + err);
+                    } else {
+                        var x2js = new X2JS();
+                        $(".login").hide();
+                        $(".success2").show();
+                        $("#pdataa").val(JSON.stringify(x2js.xml_str2json(data)));
                     }
                 }
             );
@@ -89,8 +111,5 @@ use App\Libraries\Hash;
             };
             xhr.send(InputXml);
         };
-        $(document).on("click", ".login", function(e) {
-            alert('Login');
-        });
     });
 </script>

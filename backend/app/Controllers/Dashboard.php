@@ -53,6 +53,10 @@ class Dashboard extends BaseController
             return  redirect()->to('dashboard/' . Hash::path('add'))->with('auth_id', $auth_id);
         }
     }
+    public function authenAction()
+    {
+        return  redirect()->to('dashboard/' . Hash::path('view'))->with('success', 'Authentication Success');
+    }
     public function index()
     {
         $data = [
