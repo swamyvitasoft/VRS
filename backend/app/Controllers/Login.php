@@ -98,7 +98,26 @@ class Login extends BaseController
                 if (!$logged_info) {
                     return  redirect()->back()->with('fail', 'Email ID Incorrect Format.')->withInput();
                 } else {
-                    return  redirect()->back()->with('success', 'Instructions sent your registered e-mail.')->withInput();
+                    helper('text');
+                    $new_password = random_string('alnum', 6);
+                    $to = $email_id;
+                    $subject = 'Recover Password';
+                    $message = 'Hello ' . $logged_info['name'] . ', Your new password ' . $new_password;
+                    $email = \Config\Services::email();
+                    $email->setTo($to);
+                    $email->setFrom('swamy@vitasoft.in', '');
+                    $email->setSubject($subject);
+                    $email->setMessage($message);
+                    if ($email->send()) {
+                        $inputData = array(
+                            'password' => Hash::make($new_password)
+                        );
+                        $query = $this->loginModel->update($logged_info['login_id'], $inputData);
+                        return  redirect()->back()->with('success', 'Instructions sent your registered e-mail.')->withInput();
+                    } else {
+                        $data = $email->printDebugger(['headers']);
+                        return  redirect()->back()->with('fail', $data)->withInput();
+                    }
                 }
             }
         }

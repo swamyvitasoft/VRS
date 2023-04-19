@@ -85,7 +85,7 @@
                     </div>
                     <div class="row mt-3">
                         <!-- Form -->
-                        <form class="col-12" id="recoverform" action="<?= site_url() ?>recover" method="post">
+                        <form class="col-12" id="recoverform" action="<?= site_url() ?>recover" method="post" onsubmit="if (! confirm('Confirm to recover your password?')) { return false; }">
                             <?= csrf_field(); ?>
                             <?php if (!empty(session()->getFlashdata('fail'))) : ?>
                                 <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
