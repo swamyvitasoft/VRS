@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Hash;
 use App\Models\AuthModel;
+use App\Models\LoginModel;
 use App\Models\RegisterModel;
 
 class Dashboard extends BaseController
@@ -11,10 +12,12 @@ class Dashboard extends BaseController
     private $loggedInfo;
     private $registerModel;
     private $authModel;
+    private $loginModel;
     public function __construct()
     {
         $this->registerModel = new RegisterModel();
         $this->authModel = new AuthModel();
+        $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
     }
     public function authAction()
@@ -373,6 +376,47 @@ class Dashboard extends BaseController
             return  redirect()->back()->with('fail', 'Something went wrong Input Data.')->withInput();
         } else {
             return  redirect()->to('dashboard/' . Hash::path('index'))->with('success', 'Congratulations! Record Efected');
+        }
+    }
+    public function changepwd()
+    {
+        $data = [
+            'pageTitle' => 'VRS | Dashboard',
+            'pageHeading' => 'Dashboard',
+            'loggedInfo' => $this->loggedInfo
+        ];
+        return view('common/top', $data)
+            . view('dashboard/changepwd')
+            . view('common/bottom');
+    }
+    public function updatepwd()
+    {
+        $validation = $this->validate([
+            'email_id' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Mail Id is required.'
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Password is required.'
+                ]
+            ]
+        ]);
+        if (!$validation) {
+            return  redirect()->back()->with('validation', $this->validator)->withInput();
+        } else {
+            $inputData = array(
+                'password' => Hash::make($this->request->getPost("password"))
+            );
+            $query = $this->loginModel->update($this->loggedInfo['login_id'], $inputData);
+            if (!$query) {
+                return  redirect()->back()->with('fail', 'Something went wrong Input Data.')->withInput();
+            } else {
+                return  redirect()->back()->with('success', 'Your Password Changed Success');
+            }
         }
     }
 }

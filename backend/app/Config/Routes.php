@@ -50,6 +50,8 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('show') . '/(:any)', 'Dashboard::show/$1');
         $routes->get(Hash::path('edit') . '/(:any)', 'Dashboard::edit/$1');
         $routes->get(Hash::path('delete') . '/(:any)', 'Dashboard::delete/$1');
+        $routes->get(Hash::path('changepwd'), 'Dashboard::changepwd');
+        $routes->post(Hash::path('updatepwd'), 'Dashboard::updatepwd');
     });
 });
 $routes->get('logout', 'Login::logout');
