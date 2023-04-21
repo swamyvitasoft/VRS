@@ -177,6 +177,7 @@ use App\Libraries\Hash;
                                         </div>
                                     </div>
                                     <div class="form-group mt-3">
+                                    <input type="hidden" name="photo1" value="<?= $registeredData['photo'] ?>">
                                         <label for="photo" class="form-label">Photo</label>
                                         <input type="radio" class="form-check-input" name="photo_radio" id="photo_choose" value="Choose" checked>Chosse To Upload
                                         <input type="radio" class="form-check-input" name="photo_radio" id="photo_camera" value="Camere">Capture from Camera

@@ -1,6 +1,9 @@
 <?php
 
 use App\Libraries\Hash;
+
+$data = session()->getFlashdata('data');
+$data = explode ("@", ''.$data); 
 ?>
 <div class="preloader">
     <div class="lds-ripple">
@@ -29,7 +32,7 @@ use App\Libraries\Hash;
                                 <div class="col-10">
                                     <div class="form-group mt-3">
                                         <label for="empId" class="form-label">Employee Id</label>
-                                        <input type="text" name="empId" class="form-control" id="empId" placeholder="" value="<?= set_value('empId') ?>">
+                                        <input type="text" name="empId" class="form-control" id="empId" placeholder="" value="<?= $data[1] ?>" readonly>
                                         <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'empId') : '' ?></small>
                                     </div>
                                     <div class="form-group mt-3">
@@ -196,7 +199,7 @@ use App\Libraries\Hash;
                                             <input type="hidden" name="photo2" id="photo2" class="form-control">
                                         </div>
                                     </div>
-                                    <input type="hidden" name="auth_id" id="auth_id" class="form-control" readonly value="<?= session()->getFlashdata('auth_id') ?>">
+                                    <input type="hidden" name="auth_id" id="auth_id" class="form-control" readonly value="<?= $data[0] ?>">
                                     <div class="text-center"><button type="submit" class="btn btn-success">Save</button></div>
                                 </div>
                             </form>
@@ -243,7 +246,6 @@ use App\Libraries\Hash;
                     .then(handleSuccess);
             }
         });
-
         $("#aadhar_yes").click(function() {
             if ($(this).is(":checked")) {
                 $("#aadhar").show();

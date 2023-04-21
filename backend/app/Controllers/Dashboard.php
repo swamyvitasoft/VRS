@@ -20,28 +20,24 @@ class Dashboard extends BaseController
         $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
     }
-    public function authAction()
+    public function regAction()
     {
-        $pidData = $this->request->getPost("pdata");
-        $json1 = '' . $pidData;
-        $data = json_decode($json1, TRUE);
-        $nmPoints = $data['PidData']['Resp']['_nmPoints'];
-        $qScore = $data['PidData']['Resp']['_qScore'];
-        $skey_ci = $data['PidData']['Skey']['_ci'];
-        $skey = $data['PidData']['Skey']['__text'];
-        $hmac = $data['PidData']['Hmac'];
-        $data_type = $data['PidData']['Data']['_type'];
-        $dataa = $data['PidData']['Data']['__text'];
-
         $inputData = [
-            'pidData' => $pidData,
-            'nmPoints' => $nmPoints,
-            'qScore' => $qScore,
-            'skey' => $skey,
-            'skey_ci' => $skey_ci,
-            'hmac' => $hmac,
-            'dataa' => $dataa,
-            'data_type' => $data_type,
+            'empId' => $this->request->getPost("eId"),
+            'tmplval' => $this->request->getPost("tmplval"),
+            'serialNumber' => $this->request->getPost("serialNumber"),
+            'imageHeight' => $this->request->getPost("imageHeight"),
+            'imageWidth' => $this->request->getPost("imageWidth"),
+            'imageDPI' => $this->request->getPost("imageDPI"),
+            'nFIQ' => $this->request->getPost("nFIQ"),
+            'templateBase64' => $this->request->getPost("templateBase64"),
+            'isoImgBase64' => $this->request->getPost("isoImgBase64"),
+            'sessionKey' => $this->request->getPost("sessionKey"),
+            'encryptedPidXml' => $this->request->getPost("encryptedPidXml"),
+            'encryptedHmac' => $this->request->getPost("encryptedHmac"),
+            'clientIP' => $this->request->getPost("clientIP"),
+            'timestamp' => $this->request->getPost("timestamp"),
+            'fdc' => $this->request->getPost("fdc"),
             'status' => 1,
             'login_id' => $this->loggedInfo['login_id'],
         ];
@@ -50,12 +46,23 @@ class Dashboard extends BaseController
         if (!$query) {
             return  redirect()->back()->with('fail', 'Something went wrong Input Data.')->withInput();
         } else {
-            return  redirect()->to('dashboard/' . Hash::path('add'))->with('auth_id', $auth_id);
+            $data = $auth_id."@".$this->request->getPost("eId");
+            return  redirect()->to('dashboard/' . Hash::path('add'))->with('data', $data);
         }
     }
-    public function authenAction()
+    public function logAction()
     {
-        return  redirect()->to('dashboard/' . Hash::path('view'))->with('success', 'Authentication Success');
+        $empId = $this->request->getPost("empId");
+        $registeredData = $this->registerModel->where(['empId' => $empId, 'status' => 1])->findAll();
+        $data = [
+            'pageTitle' => 'VRS | Dashboard',
+            'pageHeading' => 'Dashboard',
+            'loggedInfo' => $this->loggedInfo,
+            'registeredData' => $registeredData[0]
+        ];
+        return view('common/top', $data)
+            . view('dashboard/show')
+            . view('common/bottom');
     }
     public function index()
     {
@@ -80,6 +87,18 @@ class Dashboard extends BaseController
         return view('common/top', $data)
             . view('dashboard/view')
             . view('common/bottom');
+    }
+    public function auth($empId = 0)
+    {
+        $authData = $this->authModel->where(['empId' => $empId])->findAll();
+        if(!empty($authData)){
+            $data = $empId."@".$authData[0]['tmplval'];
+            return  redirect()->back()->with('data', $data);
+        }
+        else{
+            $data = null."@".null;
+            return  redirect()->back()->with('data', $data);
+        }
     }
     public function show($register_id = 0)
     {
@@ -119,7 +138,7 @@ class Dashboard extends BaseController
         } else {
             $registeredData = $this->registerModel->where(['register_id' => $register_id])->findAll();
             rename('uploads/' . $registeredData[0]['phone'], 'uploads/' . $registeredData[0]['phone'] . '_old');
-            return  redirect()->back()->with('success', 'Congratulation. You are now deleted ');
+            return  redirect()->back()->with('success', 'Congratulation. You are now deleted');
         }
     }
     public function add()
