@@ -1,5 +1,5 @@
 .bg-dark {
-    background-color: #f8f9f9!important;
+    background-color: #f8f9f9 !important;
 }
 
 .btn-theme02 {
@@ -11,4 +11,8 @@
 .list-group-item {
     padding: 0.1rem 0.1rem;
     border: none;
+}
+
+.page-wrapper>.container-fluid {
+    min-height: calc(95vh - 180px);
 }

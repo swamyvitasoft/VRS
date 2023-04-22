@@ -23,7 +23,7 @@ class Dashboard extends BaseController
     public function regAction()
     {
         $inputData = [
-            'empId' => $this->request->getPost("eId"),
+            'empId' => $this->request->getPost("empId"),
             'tmplval' => $this->request->getPost("tmplval"),
             'serialNumber' => $this->request->getPost("serialNumber"),
             'imageHeight' => $this->request->getPost("imageHeight"),
@@ -46,7 +46,7 @@ class Dashboard extends BaseController
         if (!$query) {
             return  redirect()->back()->with('fail', 'Something went wrong Input Data.')->withInput();
         } else {
-            $data = $auth_id."@".$this->request->getPost("eId");
+            $data = $auth_id . "@" . $this->request->getPost("empId");
             return  redirect()->to('dashboard/' . Hash::path('add'))->with('data', $data);
         }
     }
@@ -88,17 +88,25 @@ class Dashboard extends BaseController
             . view('dashboard/view')
             . view('common/bottom');
     }
-    public function auth($empId = 0)
+    public function auth1()
     {
+        $empId = $this->request->getPost("eId");
         $authData = $this->authModel->where(['empId' => $empId])->findAll();
-        if(!empty($authData)){
-            $data = $empId."@".$authData[0]['tmplval'];
-            return  redirect()->back()->with('data', $data);
+        if (!empty($authData)) {
+            $data = [
+                'success' => true,
+                'empId' => $empId,
+                'tmplval'   => $authData[0]['tmplval'],
+                'msg' => "Exists Employee Check your Data"
+            ];
+        } else {
+            $data = [
+                'success' => true,
+                'empId' => $empId,
+                'msg' => "New Employee Registration"
+            ];
         }
-        else{
-            $data = null."@".null;
-            return  redirect()->back()->with('data', $data);
-        }
+        return $this->response->setJSON($data);
     }
     public function show($register_id = 0)
     {

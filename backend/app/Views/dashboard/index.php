@@ -15,52 +15,48 @@ $data = explode("@", '' . $data);
     <?= view('common/header1') ?>
     <div class="page-wrapper pt-5">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <?= csrf_field(); ?>
-                    <?php if (!empty(session()->getFlashdata('fail'))) : ?>
-                        <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
-                    <?php elseif (!empty(session()->getFlashdata('success'))) : ?>
-                        <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
-                    <?php endif ?>
-                </div>
-                <div class="col-4">
-                    <div class="card">
-                        <div class="card-body mx-auto d-block">
-                            <form action="<?= site_url() ?>dashboard/<?= Hash::path('regAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
-                                <input type="text" name="eId" class="form-control eId" id="eId" placeholder="Employee Id" required>
-                                <textarea id="tmplval" name="tmplval" cols="100" rows="10" style="display: none;"></textarea>
-                                <input type="hidden" name="serialNumber" id="serialNumber">
-                                <input type="hidden" name="imageHeight" id="imageHeight">
-                                <input type="hidden" name="imageWidth" id="imageWidth">
-                                <input type="hidden" name="imageDPI" id="imageDPI">
-                                <input type="hidden" name="nFIQ" id="nFIQ">
-                                <textarea id="templateBase64" name="templateBase64" cols="100" rows="10" style="display: none;"></textarea>
-                                <textarea id="isoImgBase64" name="isoImgBase64" cols="100" rows="10" style="display: none;"></textarea>
-                                <input type="hidden" name="sessionKey" id="sessionKey">
-                                <textarea id="encryptedPidXml" name="encryptedPidXml" cols="100" rows="10" style="display: none;"></textarea>
-                                <input type="hidden" name="encryptedHmac" id="encryptedHmac">
-                                <input type="hidden" name="clientIP" id="clientIP">
-                                <input type="hidden" name="timestamp" id="timestamp">
-                                <input type="hidden" name="fdc" id="fdc">
-                                <button type="submit" class="btn btn-success btn-lg rounded text-white mt-3" id="next" style="display: none;">Next</button>
-                            </form>
-                            <button type="button" class="btn btn-cyan btn-lg rounded text-white mt-3" id="register" onclick="captureFP()"> Registration </button>
-                        </div>
+            <div class="row text-center">
+                <?= csrf_field(); ?>
+                <?php if (!empty(session()->getFlashdata('fail'))) : ?>
+                    <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
+                <?php elseif (!empty(session()->getFlashdata('success'))) : ?>
+                    <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+                <?php endif ?>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-2">
+                    <div class="form-group mt-3">
+                        <input type="text" name="eId" class="form-control form-control-lg bg-white eId" id="eId" placeholder="Employee ID" value="<?= set_value('eId') ?>" required>
+                        <span class="text-danger span" style="display: none;">Employee Id required</span>
                     </div>
-                </div>
-                <div class="col-4">
-                <img id="FPImage1" alt="Fingerpint Image" src="<?= site_url() ?>assets/images/finger.jpg" class="img img-fluid rounded mx-auto d-block">
-                </div>
-                <div class="col-4">
-                    <div class="card">
-                        <div class="card-body mx-auto d-block">
-                            <form action="<?= site_url() ?>dashboard/<?= Hash::path('logAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
-                                <input type="text" name="empId" class="form-control empId" id="empId" placeholder="Employee Id" required value="<?= $data[0] ?>" <?= empty($data[0]) ? '' : 'readonly' ?>>
-                                <button type="submit" class="btn btn-success btn-lg rounded text-white mt-3" id="show" style="display: none;">Show My Data</button>
-                            </form>
-                            <textarea id="tmplval1" name="tmplval1" cols="100" rows="10" style="display: none;"><?= $data[1] ?></textarea>
-                            <button type="button" class="btn btn-primary btn-lg rounded text-white mt-3" id="login" onclick="MatchFP()" style="display: <?= empty($data[0]) ? 'none' : 'block' ?>;"> Authentication </button>
+                    <button type="button" class="btn btn-outline-primary col-12 mt-3 register" id="register" onclick="captureFP()" style="display: none;"> Fingerprint Scanner </button>
+                    <button type="button" class="btn btn-outline-primary col-12 mt-3 login" id="login" onclick="MatchFP()" style="display: none;"> Fingerprint Scanner </button>
+                    <form action="<?= site_url() ?>dashboard/<?= Hash::path('regAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data" id="regForm" style="display: none;">
+                        <input type="text" name="empId" class="form-control form-control-lg bg-white empIdR" id="empIdR" placeholder="Employee Id" required readonly>
+                        <textarea id="tmplval" name="tmplval" cols="100" rows="10" style="display: none;"></textarea>
+                        <input type="hidden" name="serialNumber" id="serialNumber">
+                        <input type="hidden" name="imageHeight" id="imageHeight">
+                        <input type="hidden" name="imageWidth" id="imageWidth">
+                        <input type="hidden" name="imageDPI" id="imageDPI">
+                        <input type="hidden" name="nFIQ" id="nFIQ">
+                        <textarea id="templateBase64" name="templateBase64" cols="100" rows="10" style="display: none;"></textarea>
+                        <textarea id="isoImgBase64" name="isoImgBase64" cols="100" rows="10" style="display: none;"></textarea>
+                        <input type="hidden" name="sessionKey" id="sessionKey">
+                        <textarea id="encryptedPidXml" name="encryptedPidXml" cols="100" rows="10" style="display: none;"></textarea>
+                        <input type="hidden" name="encryptedHmac" id="encryptedHmac">
+                        <input type="hidden" name="clientIP" id="clientIP">
+                        <input type="hidden" name="timestamp" id="timestamp">
+                        <input type="hidden" name="fdc" id="fdc">
+                        <button type="submit" class="btn btn-outline-success col-12 mt-3">Save Employee Data</button>
+                    </form>
+                    <textarea id="tmplval1" name="tmplval1" cols="100" rows="10" style="display: none;"></textarea>
+                    <form action="<?= site_url() ?>dashboard/<?= Hash::path('logAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data" id="logForm" style="display: none;">
+                        <input type="text" name="empId" class="form-control form-control-lg bg-white empIdL" id="empIdL" placeholder="Employee Id" required readonly>
+                        <button type="submit" class="btn btn-outline-success col-12 mt-3">Show Employee Data</button>
+                    </form>
+                    <div class="form-group mt-3">
+                        <div class="text-center">
+                            <img id="FPImage1" alt="Fingerpint Image" src="<?= site_url() ?>assets/images/finger.gif" class="img-fluid border rounded-circle" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -72,19 +68,41 @@ $data = explode("@", '' . $data);
 <script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(document).on("blur", ".empId", function(e) {
-            var empId = $(this).val();
-            if(empId.trim().length === 0){
-            alert("Please Enter Employee ID");
+        $(document).on("blur", ".eId", function(e) {
+            e.preventDefault();
+            var eId = $(this).val();
+            if (eId.trim().length === 0) {
+                $('.span').show();
+                return true;
             }
-            else{
-                location.replace("<?= site_url() ?>dashboard/<?= Hash::path('auth') ?>/" + empId);
-            }
+            $.ajax({
+                type: "POST",
+                url: "<?= site_url() ?>dashboard/<?= Hash::path('auth1') ?>",
+                data: {
+                    eId: eId
+                },
+                success: function(data) {
+                    $('.eId').attr('readonly', 'true');
+                    $('.span').hide();
+                    $('#empIdR').val(data.empId);
+                    $('#empIdL').val(data.empId);
+                    if ($.trim(data.tmplval) == '') {
+                        $('.register').show();
+                    } else {
+                        $("#tmplval1").val(data.tmplval);
+                        $('.login').show();
+                    }
+                },
+                error: function(data) {
+                    alert('network error try again.');
+                },
+            });
         });
     });
 </script>
 <script>
     function captureFP() {
+        document.getElementById("FPImage1").style.display = "block";
         jsonp("http://localhost:8090/FM220/gettmpl?callback=?",
             function(result) {
                 SuccessFunc(result);
@@ -92,6 +110,7 @@ $data = explode("@", '' . $data);
     }
 
     function MatchFP() {
+        document.getElementById("FPImage1").style.display = "block";
         jsonp("http://localhost:8090/FM220/GetMatchResult?MatchTmpl=" + encodeURIComponent(document.getElementById("tmplval1").value.toString()) + "&callback=?",
             function(result) {
                 SuccessMatch(result);
@@ -120,6 +139,10 @@ $data = explode("@", '' . $data);
         if (result.errorCode == 0) {
             if (result != null && result.bMPBase64.length > 0) {
                 document.getElementById("FPImage1").src = "data:image/bmp;base64," + result.bMPBase64;
+                document.getElementById("FPImage1").classList.add("border-5");
+                document.getElementById("FPImage1").classList.add("border-dark");
+                document.getElementById("FPImage1").style.width = "170px";
+                document.getElementById("FPImage1").style.height = "170px";
             }
             document.getElementById("tmplval").value = result.templateBase64;
             document.getElementById("serialNumber").value = result.serialNumber;
@@ -135,11 +158,12 @@ $data = explode("@", '' . $data);
             document.getElementById("clientIP").value = result.clientIP;
             document.getElementById("timestamp").value = result.timestamp;
             document.getElementById("fdc").value = result.fdc;
+            document.getElementById("eId").style.display = "none";
             document.getElementById("register").style.display = "none";
-            document.getElementById("next").style.display = "block";
-            document.getElementById("eId").readOnly = true;
+            document.getElementById("regForm").style.display = "block";
         } else {
-            alert("Fingerprint Capture ErrorCode " + result.errorCode + "Desc :-" + result.status);
+            document.getElementById("FPImage1").style.display = "none";
+            alert("Fingerprint Capture Error " + result.status);
         }
     }
 
@@ -147,11 +171,17 @@ $data = explode("@", '' . $data);
         if (result.errorCode == 0) {
             if (result != null && result.bMPBase64.length > 0) {
                 document.getElementById("FPImage1").src = "data:image/bmp;base64," + result.bMPBase64;
+                document.getElementById("FPImage1").classList.add("border-5");
+                document.getElementById("FPImage1").classList.add("border-dark");
+                document.getElementById("FPImage1").style.width = "170px";
+                document.getElementById("FPImage1").style.height = "170px";
             }
+            document.getElementById("eId").style.display = "none";
             document.getElementById("login").style.display = "none";
-            document.getElementById("show").style.display = "block";
+            document.getElementById("logForm").style.display = "block";
         } else {
-            alert("Fingerprint Capture ErrorCode " + result.errorCode + "Desc :-" + result.status);
+            document.getElementById("FPImage1").style.display = "none";
+            alert("Fingerprint Capture Error " + result.status);
         }
     }
 

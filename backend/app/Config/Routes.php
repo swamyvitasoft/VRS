@@ -48,6 +48,7 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('add'), 'Dashboard::add');
         $routes->post(Hash::path('addAction'), 'Dashboard::addAction');
         $routes->get(Hash::path('view'), 'Dashboard::view');
+        $routes->post(Hash::path('auth1'), 'Dashboard::auth1');
         $routes->get(Hash::path('auth') . '/(:any)', 'Dashboard::auth/$1');
         $routes->get(Hash::path('show') . '/(:any)', 'Dashboard::show/$1');
         $routes->get(Hash::path('edit') . '/(:any)', 'Dashboard::edit/$1');
